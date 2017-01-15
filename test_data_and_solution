@@ -1,0 +1,22 @@
+CREATE TABLE test_char (
+status VARCHAR2 (10 CHAR), 
+reason1 VARCHAR2 (10 CHAR), 
+reason2 VARCHAR2 (10 CHAR), 
+reason3 VARCHAR2 (10 CHAR), 
+other VARCHAR2 (4000 CHAR), 
+reasonforchange VARCHAR2 (4000 CHAR)
+);
+
+INSERT INTO test_char (status, reason1, reason2, reason3, other, reasonforchange)
+VALUES ('Active', rpad('x', 10, 'x'), rpad('y', 10, 'y'), rpad('z', 10, 'z'), rpd('o', 4000, 'o'), null); 
+
+SELECT DECODE(status, 'Active', reason1 || reason2 || reason3 || other, 'Inactive', nvl(reasonforchange, 'NoReason')
+FROM test_char; 
+
+SELECT length(reason1 || reason2 || reason3 || other)
+FROM test_char; 
+
+Solution to the problem is to turn the varchar2 datatype to clob using to_clob funciton. 
+
+SELECT DECODE(status, 'Active', to_clob(reason1) || to_clob(reason2) || to_clob(reason3) || to_clob(other), 'Inactive', nvl(reasonforchange, 'NoReason')
+FROM test_char; 
